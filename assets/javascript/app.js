@@ -1,7 +1,7 @@
-
+var questions = [one, two, three];
 var	one  = 
 	{
-		question: 'What color is the sky',
+		question: 'What color is the sky?',
 		correctAnswer: 'blue',
 		allAnswers: ['yellow', 'red', 'green', 'blue']
 	};
@@ -13,20 +13,40 @@ var	two =
 		allAnswers: ['monroe', 'adams', 'jefferson', 'grant']
 	};
 
+var three = 
+	{
+		question: "What is two plus two?",
+		correctAnswer: 'four',
+		allAnswers: ['one', 'two', 'three', 'four']
+	};
+var timer;
+var rightAnswers = 0;
+
 //hides panels
 $( '.panel-body' ).not( "#answerOne" ).hide();
 //makes a start button that asks a question when clicked
 $('#answerOne').html("Start!").on( "click", function() 
 	{
-		askQuestion(one);
-
-		
-		
+		askQuestion(three);
 	});
 
+//coundown function from stackoverflow
+function myCountDown(){
+	var n = 16;
+	setTimeout(countDown,1000);
+	function countDown(){
+  	 	n--;
+   		if(n > 0){
+     	setTimeout(countDown,1000);
+   	}
+   	$('#timeLeft').html(n);
+	}
+}
+//diplays the question/answers/timer
 function askQuestion(array) {
+	
+	timer = setTimeout(timeIsUp, 16000);
 	$('.panel-body').show();
-  	$('#answerOne').html("Possible Answer 1");
   	$('#question').html(array.question);
   	array.allAnswers = shuffle(array.allAnswers);
 	$('#answerOne').html(array.allAnswers[0]);
@@ -34,12 +54,22 @@ function askQuestion(array) {
 	$('#answerThree').html(array.allAnswers[2]);
 	$('#answerFour').html(array.allAnswers[3]);
 	$('#answerOne').off("click");
-	activateMouseover()
+	activateMouseover();
+	myCountDown();		
 	isThisTheAnswer(array);
-	// console.log(this.allAnswers);
-	return
 }
 
+function timeIsUp() {
+	$('.panel-body').hide();
+    $('#answerOne').show().html("You ran out of time");
+}
+
+function displayPossibleAnswers () {
+	$('#answerOne').html(array.allAnswers[0]);
+	$('#answerTwo').html(array.allAnswers[1]);
+	$('#answerThree').html(array.allAnswers[2]);
+	$('#answerFour').html(array.allAnswers[3]);
+}
 
 //copied from stackoverflow
 function shuffle(array) {
@@ -57,17 +87,19 @@ function shuffle(array) {
   return array;
 }
 
+//determines if the clicked answer is correct
 function isThisTheAnswer(array) {
-    var x;
+    var x;    
     $('.answer').click(function() {
+    	clearTimeout(timer);
         x = $(this).text();
         checkAnswer();
     });
     function checkAnswer() {
         if (x == array.correctAnswer) {
-        	console.log("Correct");
         	$('.panel-body').hide();
         	$('#answerOne').show().html("Correct");
+        	rightAnswers++;
         }
         else {
         	console.log("Wrong");
@@ -77,6 +109,8 @@ function isThisTheAnswer(array) {
         }
     }
 }
+
+
 
 function activateMouseover() {
 	mouseoverById('#answerOne');
