@@ -1,12 +1,4 @@
-.jumbotron {
-	margin-top: 20px;
-	background-color: black;
-	background-opacity: .01;
-	width: 99%;
-	height: 95vh;
-	color: green;
-	/*height: 100px;*/
-}
+
 
 .container-fluid {
 	width: 98%;
@@ -14,10 +6,11 @@
 
 body {
 	background-image: url('../images/purple.jpg'); 
-	background-size: 100%;
- 	/*background-repeat:no-repeat;*/
+	background-size: cover;
+ 	background-repeat:no-repeat;
 	color: #bd7fd8;
-	background-color: #4d1c5d;
+	background-color: #2c1235;
+
 }
 
 .panel-body {
@@ -29,5 +22,5 @@ body {
 	border-color: #bd7fd8;
 	color: lightgreen;
 	padding-top: 20px;
-
 }
+

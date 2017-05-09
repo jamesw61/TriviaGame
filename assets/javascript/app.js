@@ -1,122 +1,133 @@
-var questions = [one, two, three];
-var	one  = 
-	{
-		question: 'What color is the sky?',
-		correctAnswer: 'blue',
-		allAnswers: ['yellow', 'red', 'green', 'blue']
-	};
-
-var	two = 
-	{
-		question: "Who is buried in Grant's Tomb?",
-		correctAnswer: 'grant',
-		allAnswers: ['monroe', 'adams', 'jefferson', 'grant']
-	};
-
-var three = 
-	{
-		question: "What is two plus two?",
-		correctAnswer: 'four',
-		allAnswers: ['one', 'two', 'three', 'four']
-	};
+var questionList = ['What color is the sky?', "Who is buried in Grant's Tomb?", "What is two plus two?"];
+var correctAnswerList = ['blue', 'grant', 'four'];
+var allAnswerList = [ ['yellow', 'red', 'green', 'blue'], ['monroe', 'adams', 'jefferson', 'grant'], ['one', 'two', 'three', 'four'] ];
+// var imageList = [ '../images/monroe.jpg', '../images/grant.jpg', '../images/two.jpg'];
+var qcount = 0;
 var timer;
 var rightAnswers = 0;
 
-//hides panels
-$( '.panel-body' ).not( "#answerOne" ).hide();
-//makes a start button that asks a question when clicked
-$('#answerOne').html("Start!").on( "click", function() 
+
+
+activateMouseover();
+
+// $('.panel-body').not('#clickStart').hide();
+$('#clickStart').on( "click", function() 
 	{
-		askQuestion(three);
+		$('.panel-body').show();
+		askQuestion(qcount);
+		myCountDown();	
 	});
 
+$('#clickReset').on( "click", function()
+	{
+		resetGame();
+	})
+
+function resetGame(){
+	qcount = 0;
+	rightAnswers = 0;
+	$('#clickStart').show().html("Start");
+	// $('.panel-body').not('#clickStart').hide();
+
+}
+
+
+function askQuestion(qcount) {
+	
+	$('.panel-body').show().css('background-color', 'black');
+  	$('#displayQuestion').html(questionList[qcount]);
+	$('#answerOne').html(allAnswerList[qcount][0]);
+	$('#answerTwo').html(allAnswerList[qcount][1]);
+	$('#answerThree').html(allAnswerList[qcount][2]);
+	$('#answerFour').html(allAnswerList[qcount][3]);
+
+	// $('#answerOne').off("click");
+	// activateMouseover();		
+	isThisTheAnswer();
+}
+
+
+
+function isThisTheAnswer() {
+    var clickedAnswer;    
+    $('.answer').click(function() {
+    	clearTimeout(timer);
+        clickedAnswer = $(this).text();
+        $('.answer').off('click');
+        console.log(clickedAnswer);
+        console.log(correctAnswerList[qcount]);
+        checkAnswer();
+    	});
+
+    	function checkAnswer() {
+        	if (clickedAnswer == correctAnswerList[qcount]) {
+        		// $('.panel-body').hide();
+				rightAnswers++;
+        		qcount++;
+        		$('#score').html("Wins:  " + rightAnswers);
+        		// console.log(qcount);
+        		$('.panel-body').hide();
+        		$('#clickStart').show().html("Correct - click for next question");
+        		// qcountIsFive();
+        	}      	
+        
+       		else {
+        	console.log("Wrong");
+        	$(this).text('Wrong');
+        	// $('.panel-body').hide();
+        	$('#clickStart').show().html("Wrong - click for next question");
+        	qcount++;
+        	// qcountIsFive();
+        	// console.log(qcount);
+        	};
+
+        }
+    
+}
+
+// function qcountIsFive () {
+// 	if(qcount=3){
+// 		$('.panel-body').hide();
+// 		$('.clickReset').show();
+// 	}
+// }
 //coundown function from stackoverflow
 function myCountDown(){
 	var n = 16;
-	setTimeout(countDown,1000);
+	countDown();
+	// timer = setTimeout(countDown,1000);
 	function countDown(){
   	 	n--;
    		if(n > 0){
-     	setTimeout(countDown,1000);
+     	timer = setTimeout(countDown,1000);
+     	$('#timeLeft').html(n);
+     	}
+     	else if (n == 0){
+     		timeIsUp();
+     	};
    	}
-   	$('#timeLeft').html(n);
-	}
-}
-//diplays the question/answers/timer
-function askQuestion(array) {
-	
-	timer = setTimeout(timeIsUp, 16000);
-	$('.panel-body').show();
-  	$('#question').html(array.question);
-  	array.allAnswers = shuffle(array.allAnswers);
-	$('#answerOne').html(array.allAnswers[0]);
-	$('#answerTwo').html(array.allAnswers[1]);
-	$('#answerThree').html(array.allAnswers[2]);
-	$('#answerFour').html(array.allAnswers[3]);
-	$('#answerOne').off("click");
-	activateMouseover();
-	myCountDown();		
-	isThisTheAnswer(array);
+   	
 }
 
 function timeIsUp() {
 	$('.panel-body').hide();
-    $('#answerOne').show().html("You ran out of time");
+    $('#clickReset').show().html("You ran out of time");
 }
 
 function displayPossibleAnswers () {
-	$('#answerOne').html(array.allAnswers[0]);
-	$('#answerTwo').html(array.allAnswers[1]);
-	$('#answerThree').html(array.allAnswers[2]);
-	$('#answerFour').html(array.allAnswers[3]);
+	$('#answerOne').html(allAnswerList[value][0]);
+	$('#answerTwo').html(allAnswerList[value][1]);
+	$('#answerThree').html(allAnswerList[value][2]);
+	$('#answerFour').html(allAnswerList[value][3]);
 }
-
-//copied from stackoverflow
-function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex;
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-  return array;
-}
-
-//determines if the clicked answer is correct
-function isThisTheAnswer(array) {
-    var x;    
-    $('.answer').click(function() {
-    	clearTimeout(timer);
-        x = $(this).text();
-        checkAnswer();
-    });
-    function checkAnswer() {
-        if (x == array.correctAnswer) {
-        	$('.panel-body').hide();
-        	$('#answerOne').show().html("Correct");
-        	rightAnswers++;
-        }
-        else {
-        	console.log("Wrong");
-        	$(this).text('Wrong');
-        	$('.panel-body').hide();
-        	$('#answerOne').show().html("Wrong");
-        }
-    }
-}
-
-
 
 function activateMouseover() {
 	mouseoverById('#answerOne');
 	mouseoverById('#answerTwo');
 	mouseoverById('#answerThree');
 	mouseoverById('#answerFour');
+	mouseoverById('#clickStart');
+	mouseoverById('#clickReset');
 }
 
 function mouseoverById (id) {
