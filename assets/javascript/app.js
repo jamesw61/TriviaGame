@@ -1,7 +1,7 @@
-var questionList = ['What color is the sky?', "Who is buried in Grant's Tomb?", "What is two plus two?"];
-var correctAnswerList = ['blue', 'grant', 'four'];
-var allAnswerList = [ ['yellow', 'red', 'green', 'blue'], ['monroe', 'adams', 'jefferson', 'grant'], ['one', 'two', 'three', 'four'] ];
-// var imageList = [ '../images/monroe.jpg', '../images/grant.jpg', '../images/two.jpg'];
+var questionList = ['Who authored the Monroe Doctrine?', "Who is buried in Grant's Tomb?", "What is two plus two?"];
+var correctAnswerList = ['John Quincy Adams', 'Nobody', 'four'];
+var allAnswerList = [ ['James Monroe', 'James Madison', 'John Quincy Adams', 'Marilyn Monroe'], ['Ulysses S. Grant', 'Julia Dent Grant', 'jefferson', 'grant'], ['one', 'two', 'three', 'four'] ];
+var imageList = [ "assets/images/monroe.jpg", "assets/images/grant.jpg", 'assets/images/two.jpg'];
 var qcount = 0;
 var timer;
 var rightAnswers = 0;
@@ -9,8 +9,8 @@ var rightAnswers = 0;
 
 
 activateMouseover();
+resetGame();
 
-// $('.panel-body').not('#clickStart').hide();
 $('#clickStart').on( "click", function() 
 	{
 		$('.panel-body').show();
@@ -26,9 +26,10 @@ $('#clickReset').on( "click", function()
 function resetGame(){
 	qcount = 0;
 	rightAnswers = 0;
+	clearTimeout(timer);
 	$('#clickStart').show().html("Start");
-	// $('.panel-body').not('#clickStart').hide();
-
+	$('.panel-body').not('#clickStart').hide();
+	$('#score').html("Wins:  " + rightAnswers);
 }
 
 
@@ -40,9 +41,9 @@ function askQuestion(qcount) {
 	$('#answerTwo').html(allAnswerList[qcount][1]);
 	$('#answerThree').html(allAnswerList[qcount][2]);
 	$('#answerFour').html(allAnswerList[qcount][3]);
-
-	// $('#answerOne').off("click");
-	// activateMouseover();		
+	$('#clickReset').hide();
+	$('#clickStart').hide();	
+	$('.displayImage').html('<img src=' + imageList[qcount] + ' >');
 	isThisTheAnswer();
 }
 
@@ -61,39 +62,31 @@ function isThisTheAnswer() {
 
     	function checkAnswer() {
         	if (clickedAnswer == correctAnswerList[qcount]) {
-        		// $('.panel-body').hide();
 				rightAnswers++;
         		qcount++;
         		$('#score').html("Wins:  " + rightAnswers);
-        		// console.log(qcount);
         		$('.panel-body').hide();
         		$('#clickStart').show().html("Correct - click for next question");
-        		// qcountIsFive();
+        		haveAllQuestionsBeenAsked ();
         	}      	
         
        		else {
-        	console.log("Wrong");
-        	$(this).text('Wrong');
-        	// $('.panel-body').hide();
+        	// $(this).text('Wrong');
         	$('#clickStart').show().html("Wrong - click for next question");
+        	$('.answer').hide();
+        	$('#displayQuestion').hide();
         	qcount++;
-        	// qcountIsFive();
-        	// console.log(qcount);
+        	haveAllQuestionsBeenAsked ();
         	};
 
         }
     
 }
 
-// function qcountIsFive () {
-// 	if(qcount=3){
-// 		$('.panel-body').hide();
-// 		$('.clickReset').show();
-// 	}
-// }
+
 //coundown function from stackoverflow
 function myCountDown(){
-	var n = 16;
+	var n = 8;
 	countDown();
 	// timer = setTimeout(countDown,1000);
 	function countDown(){
@@ -110,8 +103,10 @@ function myCountDown(){
 }
 
 function timeIsUp() {
+	qcount++;
 	$('.panel-body').hide();
-    $('#clickReset').show().html("You ran out of time");
+    $('#clickStart').show().html("You ran out of time - click for next question");
+    haveAllQuestionsBeenAsked ();
 }
 
 function displayPossibleAnswers () {
@@ -140,5 +135,10 @@ function mouseoverById (id) {
 	});	
 }
 
-
+function haveAllQuestionsBeenAsked () {
+	if(qcount === questionList.length) {
+		$('#clickReset').show().html("All questions have been asked - Click Here To Reset");
+		$('#clickStart').hide();
+	}
+}
 
