@@ -41,8 +41,7 @@ function askQuestion(qcount) {
 	$('#answerFour').html(allAnswerList[qcount][3]);
 	$('#clickStart').hide();
 	$('.nonanswer').hide();
-	$('.displayImage').show().html('<img src=' + imageList[qcount] + ' >');
-	isThisTheAnswer();
+	$('.displayImage').show().html('<img src=' + imageList[qcount] + ' >');	
 }
 
 function questionCountDown(){
@@ -64,11 +63,12 @@ function timeIsUp() {
 	// qcount++;
 	$('.panel-body').hide();
     $('#clickStart').show().html("You ran out of time - click for next question");
-    $('.result').show().html("The correct answer was: " + correctAnswerList[(qcount-1)]);
-    $('.displayExp').html(explanations[(qcount-1)]).show();
+    $('.result').show().html("The correct answer was: " + correctAnswerList[(qcount)]);
+    $('.displayExp').html(explanations[(qcount)]).show();
     timerTwo = setTimeout(nextQuestion,6000);
     wrongAnswers++;
     $('#score').html("Correct Answers:  " + rightAnswers + "<br><br>Incorrect Answers:  " + wrongAnswers);
+    qcount++;
     haveAllQuestionsBeenAsked ();
 }
 
@@ -110,48 +110,6 @@ function haveAllQuestionsBeenAsked () {
 	}
 }
 
-function isThisTheAnswer() {
-	console.log("a" + rightAnswers);
-    var clickedAnswer;   
-    qcount++; 
-    $('.answer').click(function() {
-    	console.log("b" + rightAnswers);
-    	clearTimeout(timer);
-        clickedAnswer = $(this).text();
-        $('.answer').off('click');
-        console.log("c" + rightAnswers);
-        checkAnswer();
-    	});
-
-    	function checkAnswer() {
-
-    		$('.displayExp').html(explanations[(qcount-1)]).show();
-    		console.log("d" + rightAnswers);
-        	if (clickedAnswer === correctAnswerList[(qcount-1)]) {
-        		console.log("e" + rightAnswers);
-				rightAnswers++;
-				console.log("f" + rightAnswers);
-        		$('#score').html("Correct Answers:  " + rightAnswers + "<br><br>Incorrect Answers:  " + wrongAnswers);
-        		$('.panel-body').hide();
-        		timerTwo = setTimeout(nextQuestion,8000);
-        		$('#clickStart').show().html("Correct - click for next question");
-        		haveAllQuestionsBeenAsked ();
-        	}      	
-        
-       		else {
-       		wrongAnswers++;
-        	$('#clickStart').show().html("Wrong - click for next question");
-        	$('#score').html("Correct Answers:  " + rightAnswers + "<br><br>Incorrect Answers:  " + wrongAnswers);
-        	$('.answer').hide();
-        	$('#displayQuestion').hide();
-        	$('.result').show().html("The correct answer was: " + correctAnswerList[(qcount-1)]);
-        	timerTwo = setTimeout(nextQuestion,8000);
-        	
-        	haveAllQuestionsBeenAsked ();
-        	};
-        }    
-}
-
 function nextQuestion (){
 		askQuestion(qcount);
 		questionCountDown();
@@ -171,6 +129,50 @@ $('#clickReset').on( "click", function()
 	{
 		resetGame();
 	})
+
+$('.answer').on( "click", function()
+{
+
+		var clickedAnswer;
+		// console.log("b" + rightAnswers);
+    	clearTimeout(timer);
+        clickedAnswer = $(this).text();
+        // $('.answer').off('click');
+        // console.log("c" + rightAnswers);
+           
+    	
+        checkAnswer();
+
+        function checkAnswer() {
+
+    		$('.displayExp').html(explanations[(qcount)]).show();
+    		// console.log("d" + rightAnswers);
+        	if (clickedAnswer === correctAnswerList[(qcount)]) {
+        		// console.log("e" + rightAnswers);
+				rightAnswers++;
+				// console.log("f" + rightAnswers);
+        		$('#score').html("Correct Answers:  " + rightAnswers + "<br><br>Incorrect Answers:  " + wrongAnswers);
+        		$('.panel-body').hide();
+        		timerTwo = setTimeout(nextQuestion,8000);
+        		$('#clickStart').show().html("Correct - click for next question");
+        		qcount++;
+        		haveAllQuestionsBeenAsked ();
+        	}      	
+        
+       		else {
+       		wrongAnswers++;
+        	$('#clickStart').show().html("Wrong - click for next question");
+        	$('#score').html("Correct Answers:  " + rightAnswers + "<br><br>Incorrect Answers:  " + wrongAnswers);
+        	$('.answer').hide();
+        	$('#displayQuestion').hide();
+        	$('.result').show().html("The correct answer was: " + correctAnswerList[(qcount)]);
+        	timerTwo = setTimeout(nextQuestion,8000);
+        	qcount++;
+        	haveAllQuestionsBeenAsked ();
+        	};
+        } 
+
+})
 
 
 
