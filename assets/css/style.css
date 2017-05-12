@@ -1,13 +1,10 @@
 
 
-.container-fluid {
-	width: 98%;
-}
-
 body {
 	background-image: url('../images/purple.jpg'); 
+	/*background: radial-gradient(ellipse, purple, blue);*/
 	background-size: cover;
- 	background-repeat:no-repeat;
+ 	/*background-repeat:no-repeat;*/
 	color: #bd7fd8;
 	background-color: #2c1235;
 	font-family: font37282;
@@ -33,4 +30,18 @@ body {
 
 h1 {
 	font-weight: bold;
+	padding-top: 20px;
+}
+
+#score {
+	background-color: black;
+	display: inline-block;
+	padding: 10px;
+	border-style: solid;
+	margin-bottom: 30px;
+}
+
+#mainTitle {
+	font-family: trebuchet;
+	font-size: 60px;
 }
